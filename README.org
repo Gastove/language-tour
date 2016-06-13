@@ -176,6 +176,59 @@ honest, I'm also unlikely to spend much time on any language my editor cant
 easily provide basic syntax highlighting and indentation support for -- but my
 editor is Emacs so I should, for the most part, be OK.
 
+* The Languages
+
+** [[http://nim-lang.org/][nim]]
+Statically typed and imperative, with an emphasis on its hygienic macro system
+and compiler optimizations. Tastes like somebody couldn't chose between Python
+and Haskell and just doing it in C, so rolled the three together. Might be way
+more of a system's language than I really want.
+
+~nim~ is on the one hand relatively easy to read, and on the other, has a wide
+variety of peculiarities. For instance: procedures have an implicit ~result~
+variable, and while ~nim~ will manage a lot of memory for you, it will also let
+you get up to your elbows in heap and pointers. I can see how this would excite
+someone who wanted to take a lot less time writing C; I'm not sure I'm in to
+it.
+
+The docs would have you think that rather than being Object-Oriented, ~nim~
+embraces /procedural/ programming. A Procedure is ~nim~'s equivalent of a function.
+Intriguing.
+
+Gotta be honest: so far, a few hours of research in to this language have made
+me feel a little squeamish about doing anything with it at all, but I'm gonna
+give it a go.
+
+*** Toolchain
+- nim, the compiler
+- nimble, the package manager
+- nimsuggest, a suggestion backend for IDEs
+- Emacs major mode with
+  - company backend
+  - org-babel support
+- *No. REPL.* Erk.
+
+*** Notes:
+- There's a brew installer, but it's a release behind; mostly they seem to
+  target Windows? *nix installation is pretty manual, and inexplicably doesn't
+  include ~nimble~, the package manager. (Later I have found ~nim~ is, in fact,
+  install-able via brew.)
+- Instructions for installing nim-mode for emacs suggest installing ~nimsuggest~,
+  which one clones and performs a ~nimble build~ on. This installs an entirely
+  different version of the compiler than you just installed in the previous
+  step, but also fails to provide a ~nimsuggests~ binary anywhere useful (the
+  binary winds up in the root of the git repo. Cool.)
+- An hour after I decided to try and write some Nim I think I have *finally*
+  gotten stuff installed at all?
+- Compiles to highly optimized C, making binaries pretty effing portable.
+- ~block~ statement introduces a new scope; interesting
+- ~nim~ "achieves functional programming techniques", which means functions
+  are... well not first class, but not second class either. It's weird.
+- Boy they have a hellova macro system. Geeze.
+- There's a note in their "probably out of date" tutorial that just sort of
+  says "oh btw you can compile to JavaScript". Intriguing.
+
+
 * Footnotes
 
 [fn:1] In retrospect: wat.
