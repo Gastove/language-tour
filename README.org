@@ -1,0 +1,148 @@
+* Hello There
+
+So I've been thinking a lot about programming languages. I've gotten a little
+stuck, you see, because I do not feel like I've met the Best Language for Me.
+And what would it even mean if I had? "Best" is a difficult idea at the best
+(erk) of times, and besides -- in this bold world of software, aren't we all
+supposed to be polyglot "full stack" computer do-ers? Right language for the
+right task?
+
+Waugh.
+
+This repo, such as it is, is my attempt to think through what I want out of a
+language, or set of languages. Maybe it will also be useful to you? Here's to
+hope.
+
+* "For"-ness
+
+When I first started programming, I asked programmers of my acquaintance, "so
+what is <language name> for?" This had decidedly mixed results. A Perl
+programmer told me, "but what is any language /for/? Programming, obviously." A
+PHP developer asserted the only language you /really/ needed to care about was
+PHP. I met a Java developer who told me Java was "for" replacing C++.[fn:1]
+
+I gave up on this question for a very long time, but I've come back to it. A
+grounding anecdote: I used to work at a very good hardware store, where I was,
+briefly, responsible for the hammer aisle. We sold 112 different hammers /for
+nails/, and another 38 /not/ for nails. The "for nails" category subdivided in a
+couple different ways -- for instance, the wide category of hammers for
+framing carpentry, typically distinguished by a heavier hammer head and longer
+shaft. In framing carpentry, you hit a /lot/ of nails. Speed -- being able to
+drive a very large nail home with one strike -- is prized over precision;
+damage to the underlying lumber will be covered up by layers of finishing
+materials, so who cares if you drive the nail slightly too deep.
+
+A framing hammer is "for" framing. Is that the only thing you can do with it?
+No. Is a framing hammer the only kind of hammer you can frame with? Again, no.
+But if you are about to do some framing and thinking, "what kind of hammer
+should I get", the answer is definitely "framing hammer".
+
+JavaScript is "for" programming in the browser. Can you do an astonishing
+amount of other stuff with it? Yes, of course you can. R is "for" statistical
+programming and analysis. Can you do other stuff with it? Again, yes,
+definitely. When I ask programmers what their favorite language is "for", I
+feel like what they're hearing is some kind of insult or limit -- as though I
+want to put Java in a box labeled "use only for X", as though I'm diminishing
+Java by saying "this is good for one thing." Not so. Good design is about
+knowing limits and acknowledging them. In my desire to be a capable modern
+developer, I want to know which tools to reach for, and when. What is best, and
+when?
+
+* Developing a notion of "best"
+
+"Best" is a messy, contextual idea. The first point of context here is called
+"Ross Donaldson". I am full of opinions about what I think makes a good
+programming language, and this project is fundamentally about satisfying
+myself. Any pronouncements of quality are *entirely* within the context of how
+well I, personally, am getting along with a language. For instance: I cannot
+abide Java. Incredible things are built in Java every day, and I have a lot of
+respect for Java developers, and if I never wrote another line of it I'd be
+happier.
+
+I think a lot of the "goodness" of a language, honestly, comes down to how a
+given developers thinks. Almost like poetry or fiction -- what makes sense to
+you? What makes your brain light up and get happy? I don't find C-style syntax
+to be particularly nice; I prefer prefix notation, and love lisps. I'm trying
+to be very laid back about this; I'd love to meet a new language that surprises
+and delights me.
+
+After rather a good deal of introspection, here's what I've been able to
+quantify about language goodness, for me:
+
+** Expressive
+I overwhelmingly prefer concise to verbose. Scala is vastly preferable to Java
+in my eyes, and Clojure is even better. I'm not interested in hundreds of lines
+of ceremony just to create or assign a new variable.
+
+** Functional
+For a lot of reasons, I vastly prefer my languages functional. I find classes
+to be an unwieldy abstraction in most cases, and if I can't pass or return a
+function in a language I'm just not interested. I would always rather write a
+system of verbs than a system of nouns.
+
+** Typed
+I'm alarmed to admit that I like type systems. My favorite type systems do
+rather a lot of inference; the very nicest are entirely optional. Type systems
+/can/ be an awful drawback for a language; much as I enjoy Scala, the type
+system... can be much, much too heavy.
+
+** Run-Time
+A language needs to have a run-time that matches its use case. Clojure is, for
+me, the essential example. To run Clojure, one must run a JVM. If one is
+writing an application -- say, a web server -- the five-or-maybe-a-hundred
+seconds it takes to spin up even a modest JVM is just fine. But if you've
+written a CLI, those seconds are intolerable -- not to mention the outrageous
+resource requirements. Imagine if ~grep~ took 40 seconds and a gig of RAM to run
+on even the tiniest files. Yeah.
+
+** Approximately as high level as possible
+You know what I never ever want to do if I don't have to? Manual memory
+management. /Ugh/. But also, in some sense this idea captures for me the notion
+of a rich standard library. I mean, I /could/ implement my own socket handling,
+TCP/IP, CSV parser, etc -- but in most cases, I'd really rather not.
+
+** First-class documentation
+Docs are so, so, so important, and they belong with your source code, not in
+some external vault. First class support for documentation strings (a la
+Clojure and Python) is, in my opinion, nearly indispensable.
+
+** Comprehensible tooling
+It's at this point that I start fearing I'm asking for Too Much, but it's
+important: the tooling and ecosystem around a language shapes a huge amount of
+your experience of that language. Python packaging? Awful. And tell me: what's
+the /right/ way to package JavaScript? Java does very well here -- you could use
+maven or gradle or ant /and they will all work just fine/. In the world in which
+I would like to live, languages will have decent tools available -- linters and
+whatever build tools are needed. I would like that.
+
+* So where am I starting?
+I think of myself as a Clojure developer. I've written a lot of Scala and a lot
+of Python and a mid-sized pile of Java. I like JVMs just fine for running
+applications and a lot less for CLIs and scripting. Most of my CLI writing so
+far has been in Python or R. Python is... good, but doesn't delight me.
+(Packaging is awful and it's Just Too Imperative).
+
+One way or the other, I feel like I've got a lovely application language
+(Clojure), but lack a compelling scripting and CLI language.
+
+* How Evaluation Formed?
+So I want a good CLI language. Now what?
+
+My intention is to write three little programs in each of a small pile of
+languages, and see what the experience is like. What's testing like? How
+onerous is documentation? Is the thing awful to install or run? Note that I'm a
+professional data-wrangler, so these scripts capture common tasks for me.
+
+For each language, I'll write:
+
+1. Summarize a CSV -- sum a column, summary statistics, something like that
+2. Hit a REST API and handle the result
+3. Munge date-times -- for instance, converting a non-ISO format to ISO, or
+   parsing milli timestamps
+
+And I'll try to wrap each set of three in a little CLI, for argument parsing
+and flag handling.
+
+* Footnotes
+
+[fn:1] In retrospect: wat.
