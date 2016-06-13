@@ -18,7 +18,7 @@ hope.
 When I first started programming, I asked programmers of my acquaintance, "so
 what is <language name> for?" This had decidedly mixed results. A Perl
 programmer told me, "but what is any language /for/? Programming, obviously." A
-PHP developer asserted the only language you /really/ needed to care about was
+PP developer asserted the only language you /really/ needed to care about was
 PHP. I met a Java developer who told me Java was "for" replacing C++.[fn:1]
 
 I gave up on this question for a very long time, but I've come back to it. A
@@ -69,24 +69,25 @@ and delights me.
 After rather a good deal of introspection, here's what I've been able to
 quantify about language goodness, for me:
 
-** Expressive
+** Important to me:
+*** Expressive
 I overwhelmingly prefer concise to verbose. Scala is vastly preferable to Java
 in my eyes, and Clojure is even better. I'm not interested in hundreds of lines
 of ceremony just to create or assign a new variable.
 
-** Functional
+*** Functional
 For a lot of reasons, I vastly prefer my languages functional. I find classes
 to be an unwieldy abstraction in most cases, and if I can't pass or return a
 function in a language I'm just not interested. I would always rather write a
 system of verbs than a system of nouns.
 
-** Typed
+*** Typed
 I'm alarmed to admit that I like type systems. My favorite type systems do
 rather a lot of inference; the very nicest are entirely optional. Type systems
 /can/ be an awful drawback for a language; much as I enjoy Scala, the type
 system... can be much, much too heavy.
 
-** Run-Time
+*** Run-Time
 A language needs to have a run-time that matches its use case. Clojure is, for
 me, the essential example. To run Clojure, one must run a JVM. If one is
 writing an application -- say, a web server -- the five-or-maybe-a-hundred
@@ -95,18 +96,18 @@ written a CLI, those seconds are intolerable -- not to mention the outrageous
 resource requirements. Imagine if ~grep~ took 40 seconds and a gig of RAM to run
 on even the tiniest files. Yeah.
 
-** Approximately as high level as possible
+*** Approximately as high level as possible
 You know what I never ever want to do if I don't have to? Manual memory
 management. /Ugh/. But also, in some sense this idea captures for me the notion
 of a rich standard library. I mean, I /could/ implement my own socket handling,
 TCP/IP, CSV parser, etc -- but in most cases, I'd really rather not.
 
-** First-class documentation
+*** First-class documentation
 Docs are so, so, so important, and they belong with your source code, not in
 some external vault. First class support for documentation strings (a la
 Clojure and Python) is, in my opinion, nearly indispensable.
 
-** Comprehensible tooling
+*** Comprehensible tooling
 It's at this point that I start fearing I'm asking for Too Much, but it's
 important: the tooling and ecosystem around a language shapes a huge amount of
 your experience of that language. Python packaging? Awful. And tell me: what's
@@ -115,6 +116,31 @@ maven or gradle or ant /and they will all work just fine/. In the world in which
 I would like to live, languages will have decent tools available -- linters and
 whatever build tools are needed. I would like that.
 
+*** Actively Maintained
+At this point, I don't have the wherewithal to write my own language or
+contribute to the maintenance of one myself. Using something with a community
+behind it is a must.
+
+*** REPL
+God I adore having a REPL or interactive session available.
+
+** Nice if I can get it:
+
+*** Performant
+
+*** Concurrency Model
+
+*** Clear
+I adore it when a language isn't hard to understand even if you don't speak it.
+Consider:
+
+#+BEGIN_SRC python
+for x in range(10):
+    print(x**x)
+#+END_SRC
+
+You might not know all the fussy little python details about that block without
+learning them, but it's not hard to apprehend what it's up to.
 * So where am I starting?
 I think of myself as a Clojure developer. I've written a lot of Scala and a lot
 of Python and a mid-sized pile of Java. I like JVMs just fine for running
@@ -142,6 +168,13 @@ For each language, I'll write:
 
 And I'll try to wrap each set of three in a little CLI, for argument parsing
 and flag handling.
+
+I don't have any particular system in mind for deciding which languages to do
+this with. Some things, like a language being imperative, usually wont stop me
+from trying things out; other things, like awful documentation, might. To be
+honest, I'm also unlikely to spend much time on any language my editor cant
+easily provide basic syntax highlighting and indentation support for -- but my
+editor is Emacs so I should, for the most part, be OK.
 
 * Footnotes
 
