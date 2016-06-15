@@ -227,6 +227,11 @@ give it a go.
 - Boy they have a hellova macro system. Geeze.
 - There's a note in their "probably out of date" tutorial that just sort of
   says "oh btw you can compile to JavaScript". Intriguing.
+- Compiling and installing a local binary is "baked in" to the language at a
+  pretty deep level, which is, honestly?, really nice. Especially given the
+  compiles-to-C approach, this actually makes ~nim~ smell like a scripting
+  language I could get behind.
+- Holy christ: [[http://nim-lang.org/docs/theindex.html][this documentation index]].
 
 
 * Footnotes
