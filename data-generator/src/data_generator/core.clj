@@ -12,7 +12,7 @@
                :nums "0123456789"
                :punct-and-spaces " -!,?:~_ \"'$%&"})
 
-(def sep \,)
+(def sep \|)
 
 (defn make-rand-str
   [length candidate-chars]
@@ -36,7 +36,7 @@
     (f/unparse (f/formatters (rand-nth random-formats)) modded-date)))
 
 (def headers
-  (->> ["date" "phone_number" \newline]
+  (->> ["date" "phone_number"]
        (interpose sep)
        (apply str)))
 
@@ -69,7 +69,7 @@
   (println "Here we go!")
   (let [file-name (make-file-name)]
     (with-open [w (io/writer file-name)]
-      (.write w headers)
+      (.write w (str headers \newline))
       (loop [row-cnt 0]
         (.write w (make-row))
         (if (> row-cnt 10000000)
