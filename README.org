@@ -163,8 +163,8 @@ For each language, I'll write:
 
 1. Summarize a CSV -- sum a column, summary statistics, something like that
 2. Hit a REST API and handle the result
-3. Munge date-times -- for instance, converting a non-ISO format to ISO, or
-   parsing milli timestamps
+3. Munge date-times and phone numbers in a CSV -- for instance, converting a
+   non-ISO format to ISO, or parsing milli timestamps
 
 And I'll try to wrap each set of three in a little CLI, for argument parsing
 and flag handling.
@@ -232,6 +232,11 @@ give it a go.
   compiles-to-C approach, this actually makes ~nim~ smell like a scripting
   language I could get behind.
 - Holy christ: [[http://nim-lang.org/docs/theindex.html][this documentation index]].
+- Cannot parse datetimes with a colon in the offset
+- No meaningful regex support; provides a PEG implementation. Not at all
+  convinced I want to clamber around with that. Neat :P
+- No support for ~GET~ params. Really unclear support for ~POST~ params. All
+  headers have to be written manually.
 
 
 * Footnotes
