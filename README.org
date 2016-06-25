@@ -98,9 +98,11 @@ on even the tiniest files. Yeah.
 
 *** Approximately as high level as possible
 You know what I never ever want to do if I don't have to? Manual memory
-management. /Ugh/. But also, in some sense this idea captures for me the notion
+management. In fact, there's a tremendous list of problems, of wheels that I do
+not want to have to re-invent. Writing my own CSV parser. Performing ~GET~
+requests. /Ugh/. But also, in some sense this idea captures for me the notion
 of a rich standard library. I mean, I /could/ implement my own socket handling,
-TCP/IP, CSV parser, etc -- but in most cases, I'd really rather not.
+TCP/IP, web sockets, etc -- but in most cases, I'd really rather not.
 
 *** First-class documentation
 Docs are so, so, so important, and they belong with your source code, not in
@@ -141,6 +143,14 @@ for x in range(10):
 
 You might not know all the fussy little python details about that block without
 learning them, but it's not hard to apprehend what it's up to.
+
+*** Portable
+This is an odd one for me, because I don't generally write software that gets
+distributed on my own time. And yet: I still care about it. I don't feel overly
+concerned if, say, someone has to install an easily-available piece of software
+to run my code. But if the setup to get the code running at all is convoluted,
+I'm not even going to want to do it on my own two computers.
+
 * So where am I starting?
 I think of myself as a Clojure developer. I've written a lot of Scala and a lot
 of Python and a mid-sized pile of Java. I like JVMs just fine for running
@@ -154,7 +164,7 @@ One way or the other, I feel like I've got a lovely application language
 * How Evaluation Formed?
 So I want a good CLI language. Now what?
 
-My intention is to write three little programs in each of a small pile of
+My intention is to try writing three little programs in each of a small pile of
 languages, and see what the experience is like. What's testing like? How
 onerous is documentation? Is the thing awful to install or run? Note that I'm a
 professional data-wrangler, so these scripts capture common tasks for me.
@@ -176,13 +186,39 @@ honest, I'm also unlikely to spend much time on any language my editor cant
 easily provide basic syntax highlighting and indentation support for -- but my
 editor is Emacs so I should, for the most part, be OK.
 
+* Compiles to JavaScript
+I've been thinking about this line so much lately: "compiles to JavaScript".
+It's become common as hell. Some languages target JavaScript exclusively
+(PureScript), but the list of things that will generate JS for you is getting
+bewildering. My own dear Clojure has ClojureScript; [[nim]] will go to JS. An
+astonishing number of languages will let you go to JS.
+
+So on the one hand, this seems good! Node gives JS a systems runtime you can
+install damn near anyplace, not to mention running your code in browsers.
+
+And on the other hand: I have not been able to decide how excited I am to have
+to learn Node and the JS ecosystem /on top/ of whatever other languages I look
+at. There's something about trying to write two languages at once that just
+sounds... well. Let's consider two different things one could do:
+
+You could decide to use ClojureScript to write a JS front end for a web server.
+
+You could decide to use ClojureScript to write a script that collects CSVs off
+a set of remote servers via rsync and summarizes them.
+
+In the first example: you're already setting out to the land of JS. You're
+probably going to have a very nice time. But in the second, JS, Node, is
+incidental -- it's like having to reason about generated C code. All you're
+doing is increasing the incidental complexity of a task, and that's exactly
+what I'd like to avoid.
+
 * The Languages
 
 ** [[http://nim-lang.org/][nim]]
-Statically typed and imperative, with an emphasis on its hygienic macro system
-and compiler optimizations. Tastes like somebody couldn't chose between Python
-and Haskell and just doing it in C, so rolled the three together. Might be way
-more of a system's language than I really want.
+Statically typed and pseudo-imperative, with an emphasis on its hygienic macro
+system and compiler optimizations. Tastes like somebody couldn't chose between
+Python and Haskell and just doing it in C, so rolled the three together. Might
+be way more of a system's language than I really want.
 
 ~nim~ is on the one hand relatively easy to read, and on the other, has a wide
 variety of peculiarities. For instance: procedures have an implicit ~result~
@@ -255,6 +291,16 @@ Rust has take then full length of /Return of the Jedi/ to get in to a passable
 state. I probably should have installed via brew. JFC.
 
 ** [[http://fsharp.org/][F#]]
+
+I have to admit -- and I do not know why this is -- I've gotten /really/ curious
+about F#. In the materials published by the F# organization, it comes up over
+and over again as a language for working with data.
+
+Since the first pass -- which was late at night and not done with the most, uh,
+/attention/ -- I've found better information on getting going with F# on OSX.
+Let's try this... again.
+
+*** The First Pass
 Pro: seems mature!
 
 Con: oh god Microsoft products this is weird as shit.
@@ -295,12 +341,18 @@ Also, frankly, I can't find any other coherent "getting going with this
 language" guides and I have no interest in buying a book. So that's fine. And
 enough F# for me. Jesus.
 
+In conclusion: while F# cheerfully tells you it is multi-platform, I can't find
+a coherent story for how to get it up and ticking on Linux. This might be fine
+if running a compiled binary was wicked easy -- but I can't find any evidence
+of that either. Putting this in my back pocket for if I ever need to develop
+professionally on Windows.
+
 ** [[https://racket-lang.org/][Racket]]
 
 Ah. Racket. Gah, I have such mixed feels.
 
-Racket wants you to use it for things. It is kind and pretty well thought out.
-The standard library is ginormous and pretty parts-complete, and for those few
+Racket wants you to use it for things. It is kind and well thought out. The
+standard library is ginormous and pretty parts-complete, and for those few
 things that need an external library, they mostly seem to be available.
 
 It has functions to parse a CSV; it has functions to call a procedure on every
@@ -314,7 +366,9 @@ Something about it... I don't get. The entire notion of a /project/, of how you
 go from single files to to a well-ordered application, doesn't... seem to
 click. You get the surprising power of [[https://docs.racket-lang.org/scribble/][Scribble]], the Racket documentation tool.
 But: Scribble is your only option. There are no doc strings. There's no
-especially clear way to document an /application/. It just doesn't /click/.
+especially clear way to document an /application/. It supports a bajillion
+different programming ideas, but the logic of how they should go together
+doesn't... It just doesn't /click/, for me. At least, not yet.
 
 Also true: it can be totally overwhelming in its presentation of information
 about a thing.
