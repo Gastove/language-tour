@@ -206,7 +206,7 @@ give it a go.
 - Emacs major mode with
   - company backend
   - org-babel support
-- *No. REPL.* Erk.
+- *No. REPL.* Eek.
 
 *** Notes:
 - There's a brew installer, but it's a release behind; mostly they seem to
@@ -238,6 +238,93 @@ give it a go.
 - No support for ~GET~ params. Really unclear support for ~POST~ params. All
   headers have to be written manually.
 
+*** Conclusion
+Fast as hell. Full of neat ideas, if you're a capable C programmer who wants
+something a little shorter. Not ready for prime time. Lotsa rough bits in
+places I care about.
+
+** [[https://www.rust-lang.org/][Rust]]
+This seems friendly as hell.
+
+Also there are nearly three thousand open github issues.
+
+Also it has taken most of /Return of the Jedi/ to install. It has in fact taken
+so long that I started trying to grok F#.
+
+Rust has take then full length of /Return of the Jedi/ to get in to a passable
+state. I probably should have installed via brew. JFC.
+
+** [[http://fsharp.org/][F#]]
+Pro: seems mature!
+
+Con: oh god Microsoft products this is weird as shit.
+
+Now that I've installed ~mono~ and used it to build and run the F# package
+manager, I've also run the F# koans. Which go like this:
+
+#+BEGIN_EXAMPLE
+gastove@concordance λ ~/Code/open-source/FSharpKoans on fsharp[!]
+$ mono FSharpKoans/bin/Debug/FSharpKoans.exe
+
+
+about asserts:
+    AssertExpectation failed.
+
+
+
+You have not yet reached enlightenment ...
+  Expected: 2
+  But was:  "FILL ME IN"
+
+
+Please meditate on the following code:
+  at NUnit.Framework.Assert.That (System.Object actual, IResolveConstraint expression, System.String message, System.Object[] args) <0x1067cb790 + 0x00122> in <filename unknown>:0
+  at NUnit.Framework.Assert.AreEqual (System.Object expected, System.Object actual) <0x1067cb200 + 0x00032> in <filename unknown>:0
+  at FSharpKoans.Core.Helpers.AssertEquality[a,b] (FSharpKoans.Core.a x, FSharpKoans.Core.b y) <0x1067cb1a0 + 0x00044> in <filename unknown>:0
+  at FSharpKoans.about asserts.AssertExpectation () <0x1067cb160 + 0x0001f> in <filename unknown>:0
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (System.Reflection.MonoMethod,object,object[],System.Exception&)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) <0x105a1bcc0 + 0x000a3> in <filename unknown>:0
+
+
+
+
+Press any key to continue...
+#+END_EXAMPLE
+
+Also, frankly, I can't find any other coherent "getting going with this
+language" guides and I have no interest in buying a book. So that's fine. And
+enough F# for me. Jesus.
+
+** [[https://racket-lang.org/][Racket]]
+
+Ah. Racket. Gah, I have such mixed feels.
+
+Racket wants you to use it for things. It is kind and pretty well thought out.
+The standard library is ginormous and pretty parts-complete, and for those few
+things that need an external library, they mostly seem to be available.
+
+It has functions to parse a CSV; it has functions to call a procedure on every
+line of a CSV. It has support for PCRE. Via a third-party library you get CLDR
+date parsing. It's mature. The online documentation is *gorgeous*. It has a REPL!
+And pretty nice Emacs tooling.
+
+And.
+
+Something about it... I don't get. The entire notion of a /project/, of how you
+go from single files to to a well-ordered application, doesn't... seem to
+click. You get the surprising power of [[https://docs.racket-lang.org/scribble/][Scribble]], the Racket documentation tool.
+But: Scribble is your only option. There are no doc strings. There's no
+especially clear way to document an /application/. It just doesn't /click/.
+
+Also true: it can be totally overwhelming in its presentation of information
+about a thing.
+
+And performance is a little unclear. Nim takes just over three seconds to count
+the ten million lines of the test csv; racket, straight up, takes almost a
+minute. Bizarrely, pre-compiling this doesn't seem to have... /any effect/. Neat.
+The deploy story is unclear; distribution is unclear.
+
+I just do not know what to make of this language.
 
 * Footnotes
 
