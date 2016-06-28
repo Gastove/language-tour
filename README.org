@@ -300,7 +300,190 @@ Since the first pass -- which was late at night and not done with the most, uh,
 /attention/ -- I've found better information on getting going with F# on OSX.
 Let's try this... again.
 
-*** The First Pass
+*** Installation
+F# wants you to use a baked-in version in either Visual Studio or Xamarin
+Studio. I want none of this. Instead, we do:
+
+#+BEGIN_SRC sh :eval never
+brew install mono
+#+END_SRC
+
+~mono~ is an open-source version of the .NET framework, and comes with C# baked
+in as well. Okay. Fine so far.
+
+From here, we find the [[http://fsharp.org/guides/mac-linux-cross-platform/][Cross Platform Guide]], which points us to a project
+management tool called ~forge~. So far, so good. We can get it with:
+
+#+BEGIN_SRC sh :eval never
+brew tap samritchie/forge && brew install forge
+#+END_SRC
+
+Note: this will install version 0.7, which is current as of four months ago (I
+*believe* forge is nearing it's 1.0 release). Great. Doing fine there, too.
+
+Next is NuGet, the F# package manager. We add its SSL cert, do a little
+curling, and thennnnnnn. Well. And then some utility scripting needs to happen.
+
+#+BEGIN_SRC sh :eval never
+sudo mozroots --import --sync
+curl -L http://nuget.org/nuget.exe -o nuget.exe
+#+END_SRC
+
+So this, also, not too bad. NuGet has to run with ~mono~, so let's wrap it:
+
+#+BEGIN_SRC sh :eval never
+#!/bin/bash
+
+NUGGET_EXE=/Users/gastove/opt/nuget.exe
+
+mono "$NUGGET_EXE" "$@"
+#+END_SRC
+
+Good. Okay.
+
+*** Impressions thus far
+This is a *big* ecosystem of different tools, and they work... in a wide variety
+of ways. ~forge~, for instance, wants to read (shudder) XML, and can
+automatically install packages with NuGet -- but NuGet reads a JSON config
+file. Ergm. Okay.
+
+Perhaps my biggest challenge thus far is just how /differently/ these tools think
+than the ones I'm used to. For instance, the Mac Cross-Platform docs on
+fsharp.org casually mention:
+
+#+BEGIN_QUOTE
+It is quite common to check a copy of NuGet.exe into a project, e.g. in lib/NuGet/NuGet.exe.
+#+END_QUOTE
+
+Which feels pretty /ohmygodwhut/ to this linux developer. Binaries! In! Version!
+Control! Why!? How!?!?
+
+*** Actually figuring out how to write F#
+Now we get to what is, for me, one of the weirdest parts so far: I can find
+almost 0 cohesive text on how to actually /write/ F#. There's a whole pile of
+stuff under the heading "Learn" on fsharp.org, but the execution is
+bewildering. There's tryfsharp.org, which wants to teach you interactively in a
+site that requires Microsoft Silverlight, which is [[https://support.microsoft.com/en-us/kb/3058254][no longer compatible with
+Chrome > 44]]. There's a blog dedicated, at least in theory, to the concept of
+"F# for C/Java/Python Developers", but it mostly seems like it wants to make
+the /case/ for F#, not actually teach it. You can buy books on F#; I am not sure
+I want to buy a book just yet. (Also, _Beginning F# 4.0_ costs -- wait for it --
+$32 for the ebook? Compare-and-contrast with the PureScript book, which is
+pay-what-you-want and capped at $20.)[fn:2]
+
+[[http://dungpa.github.io/fsharp-cheatsheet/][The F# Cheat Sheet]] is pretty useful, but so far [[www.tryfsharp.org]] is the most
+promising. So I guess I will turn on Firefox and install Silverlight? Jesus
+this is weird.
+
+*** An Interlude of Good News
+
+Y'all, F# is a /lovely/ language. Compelling as heck. I wanna figure this out. It
+seems to have data work in its bones.
+
+*** A Bewilderment of Tools
+
+So Try F# is good and now I have a taste of the language and I want to write
+some. In particular, I want to F#'s incredible-seeming "type provider"
+mechanism, particularly the [[http://fsharp.github.io/FSharp.Data/][Data]] type providers. They don't come baked in, so
+I need to install them.
+
+Okay.
+
+First I try ~nuget install~. This gets me a directory, saved within whichever
+directory I called ~nuget install~ from, into which ~FSharp.Data~ has been
+installed (plus another dir for ~Zlib~). I can't figure out how to use this
+anyplace. Neat. Good. Next idea.
+
+I notice that ~forge~ has created a bunch of ~paket~ files -- most interestingly,
+~paket.dependencies~. A quick googling indicates ~paket~ is an even-more-different
+package manager for F#, providing much better management for things like
+transitive dependencies. This seems good. I add ~nuget FSharp.Data~ to my
+~paket.dependencies~, and set about trying to call ~paket~. It once again works
+/real weird/ on linux:
+
+#+BEGIN_SRC sh :eval never
+mono .paket/paket.exe install
+#+END_SRC
+
+This installs ~FSharp.Data~, but not in a way that is usable. I set off to the
+[[https://fsprojects.github.io/Paket/index.html][Paket documentation]] and begin learning a few strange things:
+
+1. I can convert a NuGet project to a paket project with a baked in command.
+2. F# makes the assumption that you'll have one /repository/ with many /projects/
+   inside of it. Each project needs to declare it's own deps, via a
+   ~paket.references~ file. This file will be generated automatically from the
+   NuGet ~package.config~.
+3. Or it /would/ be generated automatically, if the ~forge~ template didn't name
+   the config file ~App.config~, which ~paket~ cannot correctly convert. You'll
+   wanna rename that.
+4. Which /also/ means you need to remove ~App.config~ from the ~.fsproj~ file XML.
+   Otherwise compilation will fail.
+
+Also: the ~forge~ docs seem to suggest you should do something like ~forge --dir
+src --name ProjectName --template app~. This will make you a reasonable src dir,
+plus a lot of extra stuff, plus initialized ~paket~ things. But, it will /not/
+create your ~paket.references~ (which I think is still needed), and you'll need
+to run ~paket~ with ~--force~ to get everything working the first time.
+
+Now all you have to do is manually add ~FSharp.Data~ to your ~paket.references~ and
+you can go pass out quietly in a corner and think fond thoughts about
+leiningen.
+
+Oh, and another thing: every example of using ~FSharp.Data~ opens with some
+version of this line:
+
+#+BEGIN_SRC fsharp :eval never
+#r "FSharp.Data"
+#+END_SRC
+
+This will immediately explode when you put it in a file. The ~#r~ form is allowed
+/only/ in interactive F#. For standard F# files (files with the ~.fs~ extension),
+what you want is:
+
+#+BEGIN_SRC fsharp :eval never
+open FSharp.Data
+#+END_SRC
+
+Whew.
+
+*** First Coding: the CSV cleaner
+With all this assembled, what is it like to actually write some F#? Let's rock.
+
+First step: CSV cleaning. A /big/ part of F#'s draw for me is the [[http://fsharp.github.io/FSharp.Data/index.html][FSharp.Data]]
+package, and getting it going is easy as can be:
+
+#+BEGIN_SRC fsharp :eval never
+open FSharp.Data
+
+let csvPath = "/Users/gastove/Code/language-tour/data-generator/2016-06-16_random_data.csv"
+
+type DemoRecord = CsvProvider<"/Users/gastove/Code/language-tour/data-generator/2016-06-16_random_data.csv", Separators="|", Schema="Date,PhoneNumber">
+
+let data = DemoRecord.Load(csvPath)
+let firstRow = data.Rows |> Seq.head
+let firstDate = firstRow.Date
+let firstPn = firstRow.PhoneNumber
+#+END_SRC
+
+The ~CsvProvider~ seen in action here is a "type provider", and it's doing a
+/bunch/ of heavy lifting under the covers. Specifically, it's reading the first
+thousand lines of the file and trying to correctly assign each column a type.
+Some notes about this:
+
+- It has some pretty odd behaviors with underscores -- the column named
+  ~phone_number~ became a an attribute called ~Phone_number~. The ~Schema~
+  declaration is entirely to adjust this.
+- Half the CSV parsing battle in this file is cleaning up the three different
+  date formats[fn:3] in the Date column. F# correctly identified that column as
+  a date /and correctly parsed each format/. Holy damn.
+- Note that we pass the same string two places. The /intention/ here is that you
+  can separate the /analysis/ of a CSV from its parsing -- so the type provider
+  could be constructed with a short data sample and then be used to load N
+  data sources of same schema. This is neat, but also: the type provider's
+  constructor cannot accept a file path passed in an identifier (e.g.
+  ~csvPath~) -- it /has/ to receive a string literal and I do not know why.[fn:4]
+
+*** <2016-06-16 Thu> The First Pass
 Pro: seems mature!
 
 Con: oh god Microsoft products this is weird as shit.
@@ -381,5 +564,20 @@ The deploy story is unclear; distribution is unclear.
 I just do not know what to make of this language.
 
 * Footnotes
+
+[fn:4] Ah, I have learned why. Even though ~let~ introduces an immutable
+identifier, it is /not/ considered constant. However, this syntax can be used to
+tell the compiler, "It's OK, use the literal value of this identifier at
+compile time":
+#+BEGIN_SRC fsharp :eval never
+[<Literal>]
+let x = "hi"
+#+END_SRC
+
+[fn:3] ISO-8061 date time without timezone, ISO-8061 date, and RFC-822
+
+[fn:2] I have since found that the linked copy from fsharp.org is a Google
+books editions /that is just literal scans of the paper edition/. Or: you could
+buy a Real Ebook from [[http://www.apress.com/9781484213759?gtmf=s][Apress]] for $19.19. (Hint: do that second one.)
 
 [fn:1] In retrospect: wat.
