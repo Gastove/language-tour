@@ -18,8 +18,9 @@ hope.
 When I first started programming, I asked programmers of my acquaintance, "so
 what is <language name> for?" This had decidedly mixed results. A Perl
 programmer told me, "but what is any language /for/? Programming, obviously." A
-PP developer asserted the only language you /really/ needed to care about was
-PHP. I met a Java developer who told me Java was "for" replacing C++.[fn:1]
+PHP developer once asserted to me that the only language you /really/ needed to
+care about was PHP. I met a Java developer who told me Java was "for" replacing
+C++.[fn:1]
 
 I gave up on this question for a very long time, but I've come back to it. A
 grounding anecdote: I used to work at a very good hardware store, where I was,
@@ -37,16 +38,16 @@ No. Is a framing hammer the only kind of hammer you can frame with? Again, no.
 But if you are about to do some framing and thinking, "what kind of hammer
 should I get", the answer is definitely "framing hammer".
 
-JavaScript is "for" programming in the browser. Can you do an astonishing
-amount of other stuff with it? Yes, of course you can. R is "for" statistical
-programming and analysis. Can you do other stuff with it? Again, yes,
-definitely. When I ask programmers what their favorite language is "for", I
-feel like what they're hearing is some kind of insult or limit -- as though I
-want to put Java in a box labeled "use only for X", as though I'm diminishing
-Java by saying "this is good for one thing." Not so. Good design is about
-knowing limits and acknowledging them. In my desire to be a capable modern
-developer, I want to know which tools to reach for, and when. What is best, and
-when?
+R is "for" statistical programming and analysis. Can you do other stuff with it?
+Yes, definitely. JavaScript is "for" programming in the browser. Can you do an
+astonishing amount of other stuff with it? Yes, of course you can. In fact,
+increasingly, JavaScript seems to be becoming "for" making interfaces to much
+more complex systems.[fn:5] When I ask programmers what their favorite language is
+"for", I feel like what they're hearing is some kind of insult or limit -- as
+though I want to put Java in a box labeled "use only for X", as though I'm
+diminishing Java by saying "this is good for one thing." Not so. Good design is
+about knowing limits and acknowledging them. In my desire to be a capable modern
+developer, I want to know which tools to reach for, and when.
 
 * Developing a notion of "best"
 
@@ -73,7 +74,8 @@ quantify about language goodness, for me:
 *** Expressive
 I overwhelmingly prefer concise to verbose. Scala is vastly preferable to Java
 in my eyes, and Clojure is even better. I'm not interested in hundreds of lines
-of ceremony just to create or assign a new variable.
+of ceremony just to create or assign a new variable. I don't want to build a new
+class just to define and call a function. Thanks.
 
 *** Functional
 For a lot of reasons, I vastly prefer my languages functional. I find classes
@@ -86,6 +88,10 @@ I'm alarmed to admit that I like type systems. My favorite type systems do
 rather a lot of inference; the very nicest are entirely optional. Type systems
 /can/ be an awful drawback for a language; much as I enjoy Scala, the type
 system... can be much, much too heavy.
+
+I'd love to find a language with either a static or gradual type system. I don't
+care if it enters the runtime, but I'd love to be able to document the inputs
+and outputs of a function clearly.
 
 *** Run-Time
 A language needs to have a run-time that matches its use case. Clojure is, for
@@ -104,10 +110,16 @@ requests. /Ugh/. But also, in some sense this idea captures for me the notion
 of a rich standard library. I mean, I /could/ implement my own socket handling,
 TCP/IP, web sockets, etc -- but in most cases, I'd really rather not.
 
+*** Solidly Usable in my Workflow
+I already write a lot of code. I'm in Emacs all day, every day, unless I'm in my
+terminal. Learning new build tools or package managers is expected; learning a
+new IDE is not.
+
 *** First-class documentation
 Docs are so, so, so important, and they belong with your source code, not in
 some external vault. First class support for documentation strings (a la
-Clojure and Python) is, in my opinion, nearly indispensable.
+Clojure and Python) is, in my opinion, nearly indispensable. If you don't have
+some docstring mechanism, you'd better have something else nice.
 
 *** Comprehensible tooling
 It's at this point that I start fearing I'm asking for Too Much, but it's
@@ -129,8 +141,11 @@ God I adore having a REPL or interactive session available.
 ** Nice if I can get it:
 
 *** Performant
+Who doesn't love a thing that doesn't take all day to run?
 
 *** Concurrency Model
+Manually starting threads is great and all, but we can do a _lot_ better. Actor
+model? Agent model? Sensible message passing implementation?
 
 *** Clear
 I adore it when a language isn't hard to understand even if you don't speak it.
@@ -151,6 +166,10 @@ concerned if, say, someone has to install an easily-available piece of software
 to run my code. But if the setup to get the code running at all is convoluted,
 I'm not even going to want to do it on my own two computers.
 
+*** FFI
+Maybe the most optional single thing on here, but dang it'd be handy to have a
+clear way to do FFI.
+
 * So where am I starting?
 I think of myself as a Clojure developer. I've written a lot of Scala and a lot
 of Python and a mid-sized pile of Java. I like JVMs just fine for running
@@ -169,7 +188,7 @@ languages, and see what the experience is like. What's testing like? How
 onerous is documentation? Is the thing awful to install or run? Note that I'm a
 professional data-wrangler, so these scripts capture common tasks for me.
 
-For each language, I'll write:
+For each language, I'll try to write:
 
 1. Summarize a CSV -- sum a column, summary statistics, something like that
 2. Hit a REST API and handle the result
@@ -177,7 +196,8 @@ For each language, I'll write:
    non-ISO format to ISO, or parsing milli timestamps
 
 And I'll try to wrap each set of three in a little CLI, for argument parsing
-and flag handling.
+and flag handling. We'll see how far I get; the point is to evaluate a language,
+so if I find disagreeable parts early, I'll probably just... stop.
 
 I don't have any particular system in mind for deciding which languages to do
 this with. Some things, like a language being imperative, usually wont stop me
@@ -204,13 +224,14 @@ sounds... well. Let's consider two different things one could do:
 You could decide to use ClojureScript to write a JS front end for a web server.
 
 You could decide to use ClojureScript to write a script that collects CSVs off
-a set of remote servers via rsync and summarizes them.
+a set of remote servers and summarizes them.
 
 In the first example: you're already setting out to the land of JS. You're
 probably going to have a very nice time. But in the second, JS, Node, is
 incidental -- it's like having to reason about generated C code. All you're
 doing is increasing the incidental complexity of a task, and that's exactly
-what I'd like to avoid.
+what I'd like to avoid. But who knows -- maybe it's not actually that complex?
+We'll see.
 
 * The Languages
 
@@ -277,7 +298,7 @@ give it a go.
 *** Conclusion
 Fast as hell. Full of neat ideas, if you're a capable C programmer who wants
 something a little shorter. Not ready for prime time. Lotsa rough bits in
-places I care about.
+places I care about. Calling it early: nope.
 
 ** [[https://www.rust-lang.org/][Rust]]
 This seems friendly as hell.
@@ -289,6 +310,8 @@ so long that I started trying to grok F#.
 
 Rust has take then full length of /Return of the Jedi/ to get in to a passable
 state. I probably should have installed via brew. JFC.
+
+We're... gonna come back to this if I have time. Holy hell.
 
 ** [[http://fsharp.org/][F#]]
 
@@ -446,6 +469,15 @@ open FSharp.Data
 
 Whew.
 
+<2016-06-27 Mon> I have learned of ~fsproj~ files. These are XML build specs that
+control how the compiler builds your code together. Being an XML file, it's
+very difficult to intuit how to operate it. Glee.
+
+/But wait!/ There's a tool for this, too: [[http://fsprojects.github.io/Projekt/][Projekt]]. Good. Fine. More tools. (It is
+at this point, I confess, tempting to try and write yet another tool to tie
+this whole works together. And also that seems like a Yet Another Standard
+problem :/)
+
 *** First Coding: the CSV cleaner
 With all this assembled, what is it like to actually write some F#? Let's rock.
 
@@ -564,6 +596,11 @@ The deploy story is unclear; distribution is unclear.
 I just do not know what to make of this language.
 
 * Footnotes
+
+[fn:5] Slack has created a JS interface to Apache Spark. When people say,
+"Node.js has incredibly fast file operations," what they really mean is,
+"Node.js provides a clean, easy-to-reason about interface to libuv." libuv is in
+C.
 
 [fn:4] Ah, I have learned why. Even though ~let~ introduces an immutable
 identifier, it is /not/ considered constant. However, this syntax can be used to
