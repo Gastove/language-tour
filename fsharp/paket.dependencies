@@ -2,3 +2,4 @@ source https://api.nuget.org/v3/index.json
 
 nuget FAKE
 nuget FSharp.Data
+nuget CommandLineParser

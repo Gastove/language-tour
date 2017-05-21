@@ -9,9 +9,9 @@ open FSharp.Data
 open System.Text.RegularExpressions
 
 [<Literal>]
-let csvPath = "/Users/gastove/Code/language-tour/data-generator/2016-06-16_random_data.csv"
+let CsvPath = "/Users/gastove/Code/language-tour/data-generator/2016-06-16_random_data.csv"
 [<Literal>]
-let inputSep = "|"
+let InputSep = "|"
 
 let pnRe = @"[1-]?\(?(\d{3})\)?[\. -]?(\d{3})[\.-]?(\d{4})"
 let outputFile = "result.csv"
@@ -35,9 +35,9 @@ let parsePn re str =
     then Some (listToPn (List.tail [ for x in m.Groups -> x.Value ]))
     else None
 
-type DemoRecord = CsvProvider<csvPath, inputSep, Schema="CsvDate, PhoneNumber">
+type DemoRecord = CsvProvider<CsvPath, InputSep, Schema="CsvDate, PhoneNumber">
 
-let data = DemoRecord.Load(csvPath)
+let data = DemoRecord.Load(CsvPath)
 
 // Make sure it's on.
 // let firstRow = data.Rows |> Seq.head
@@ -66,9 +66,9 @@ let rowToCsvRow sep (row: DemoRecord.Row) =
     sprintf "%s%s%s" dtstr sep pn
 
 
-// [<EntryPoint>]
-// let main argv =
-//     use writer = new System.IO.StreamWriter(outputFile)
-//     for row in data.Rows do
-//         row |> rowToCsvRow outputSep |> writer.WriteLine
-//     0 // return an integer exit code
+[<EntryPoint>]
+let main argv =
+    use writer = new System.IO.StreamWriter(outputFile)
+    for row in data.Rows do
+        row |> rowToCsvRow outputSep |> writer.WriteLine
+    0 // return an integer exit code
