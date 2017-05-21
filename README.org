@@ -595,6 +595,12 @@ The deploy story is unclear; distribution is unclear.
 
 I just do not know what to make of this language.
 
+** TODO Haskell
+C'mon. I gotta.
+
+** TODO ClojureScript
+
+** TODO Julia
 * Footnotes
 
 [fn:5] Slack has created a JS interface to Apache Spark. When people say,
