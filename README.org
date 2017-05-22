@@ -206,6 +206,34 @@ honest, I'm also unlikely to spend much time on any language my editor cant
 easily provide basic syntax highlighting and indentation support for -- but my
 editor is Emacs so I should, for the most part, be OK.
 
+** Reference Implementation
+I've also knocked together a reference implementation in Clojure. I want to use
+this to reference a couplefew things:
+
+1. How much code does it take to get some of these things done in other
+   languages?
+2. How fast do other languages run compared to what I'm used to on the JVM?
+
+A weird note: in my reference impl, I use a wrapper around Java's ~joda-time~ for
+parsing. It has to handle a peculiar edge-case, like so:
+
+#+BEGIN_SRC clojure :eval never :exports code
+(defn parse-dt
+  [dt-str]
+  (try
+    (time-format/parse parse-many dt-str)
+    (catch org.joda.time.IllegalInstantException e
+      (.. (time-format/parse-local parse-many dt-str)
+          (plusHours 3)
+          (toDateTime)))))
+#+END_SRC
+
+~IllegalInstantException~ can be thrown because some of my randomly generated
+times fall on 2017-03-22, which is daylight savings time; Joda refuses to guess
+how we want to represent certain times of day. (E.G.: 2017-03-22 02:12:00 never
+actually happened, because we'd have skipped from 1am directly to 3am.)
+
+It'll be interesting to see how other libraries handle this.
 * Compiles to JavaScript
 I've been thinking about this line so much lately: "compiles to JavaScript".
 It's become common as hell. Some languages target JavaScript exclusively
