@@ -409,7 +409,7 @@ It is quite common to check a copy of NuGet.exe into a project, e.g. in lib/NuGe
 Which feels pretty /ohmygodwhut/ to this linux developer. Binaries! In! Version!
 Control! Why!? How!?!?
 
-*** Actually figuring out how to write F#
+*** Actually figuring out how to write F Sharp
 Now we get to what is, for me, one of the weirdest parts so far: I can find
 almost 0 cohesive text on how to actually /write/ F#. There's a whole pile of
 stuff under the heading "Learn" on fsharp.org, but the execution is
@@ -543,7 +543,10 @@ Some notes about this:
   constructor cannot accept a file path passed in an identifier (e.g.
   ~csvPath~) -- it /has/ to receive a string literal and I do not know why.[fn:4]
 
-*** <2016-06-16 Thu> The First Pass
+The downside: parsing the CSV takes six minutes. All that type system has a
+heckofa cost.
+
+*** The First Pass
 Pro: seems mature!
 
 Con: oh god Microsoft products this is weird as shit.
@@ -580,6 +583,8 @@ Please meditate on the following code:
 Press any key to continue...
 #+END_EXAMPLE
 
+Eventually, you decide the "koan" here is, "why did I decide to try these koans."
+
 Also, frankly, I can't find any other coherent "getting going with this
 language" guides and I have no interest in buying a book. So that's fine. And
 enough F# for me. Jesus.
@@ -589,6 +594,32 @@ a coherent story for how to get it up and ticking on Linux. This might be fine
 if running a compiled binary was wicked easy -- but I can't find any evidence
 of that either. Putting this in my back pocket for if I ever need to develop
 professionally on Windows.
+
+*** A number of Following Passes
+
+You know something, I got weirdly hooked on F#. You get mono installed; you get
+used to using ~paket~ and ~forge~. Things start to come together.
+
+You discover the excellent [[https://docs.microsoft.com/en-us/dotnet/articles/fsharp/language-reference/][MSDN F# Language Reference]]. You discover [[https://fsharp.github.io/FAKE/][FAKE]], the F#
+build tool. You learn that F# files can be run as scripts /or/ compiled. You make
+use of interfaces, the type system. Type providers blow your mind. You discover
+Microsoft's .NET static analyzer, IntelliSense, is packed and provided so devs
+can build tools like Emacs modes with good code completion.
+
+It -- IntelliSense -- also crashes -- not all the time, but /sometimes/, mostly
+when it will annoy you most. You try to hand edit an ~.fsproj~ file and find it's
+XML that was never intended for humans -- unlike a ~pom.xml~, the way you work
+with an ~.fsproj~ is with VisualStudio or the like.
+
+This last gets to the heart of the least comprehensible part of F#: Microsoft
+has built it around GUI IDEs. If you want to use something /other/: good luck to
+you. Support is third class.
+
+Sooo, I dunno. F# is such a strange combination of amazing and pure, unadultered
+wat. I'm not used to it yet. I dunno what I want it to do. Developing it has
+been mostly a pleasure, language-wise, and deeply inconsistent, tooling-wise.
+
+Whee.
 
 ** [[https://racket-lang.org/][Racket]]
 
@@ -767,6 +798,16 @@ was awful to debug, but it was reasonably pleasant to knock together at first.
 But I am calling it here. ClojureScript will be excellent for web-work, and
 probably for hitting REST APIs, but for data scrubbing, I'ma, uh, stick with
 something else.
+
+Note: the job finally finished cleaning my csv:
+
+#+BEGIN_EXAMPLE
+real    72m18.267s
+user    70m47.955s
+sys 1m29.536s
+#+END_EXAMPLE
+
+Seventy. Two. Minutes.
 
 ** TODO Julia
 ** TODO Haskell
