@@ -238,7 +238,7 @@ It'll be interesting to see how other libraries handle this.
 I've been thinking about this line so much lately: "compiles to JavaScript".
 It's become common as hell. Some languages target JavaScript exclusively
 (PureScript), but the list of things that will generate JS for you is getting
-bewildering. My own dear Clojure has ClojureScript; [[nim]] will go to JS. An
+bewildering. My own dear Clojure has ClojureScript; nim will go to JS. An
 astonishing number of languages will let you go to JS.
 
 So on the one hand, this seems good! Node gives JS a systems runtime you can
@@ -263,7 +263,7 @@ We'll see.
 
 * The Languages
 
-** [[http://nim-lang.org/][nim]]
+** [[http://nim-lang.org][nim]]
 Statically typed and pseudo-imperative, with an emphasis on its hygienic macro
 system and compiler optimizations. Tastes like somebody couldn't chose between
 Python and Haskell and just doing it in C, so rolled the three together. Might
@@ -422,7 +422,7 @@ I want to buy a book just yet. (Also, _Beginning F# 4.0_ costs -- wait for it --
 $32 for the ebook? Compare-and-contrast with the PureScript book, which is
 pay-what-you-want and capped at $20.)[fn:2]
 
-[[http://dungpa.github.io/fsharp-cheatsheet/][The F# Cheat Sheet]] is pretty useful, but so far [[www.tryfsharp.org]] is the most
+[[http://dungpa.github.io/fsharp-cheatsheet/][The F# Cheat Sheet]] is pretty useful, but so far [[http://www.tryfsharp.org][www.tryfsharp.org]] is the most
 promising. So I guess I will turn on Firefox and install Silverlight? Jesus
 this is weird.
 
