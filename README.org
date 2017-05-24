@@ -623,8 +623,6 @@ The deploy story is unclear; distribution is unclear.
 
 I just do not know what to make of this language.
 
-** TODO Haskell
-C'mon. I gotta.
 
 ** ClojureScript
 
@@ -771,6 +769,9 @@ probably for hitting REST APIs, but for data scrubbing, I'ma, uh, stick with
 something else.
 
 ** TODO Julia
+** TODO Haskell
+C'mon. I gotta.
+
 * Footnotes
 
 [fn:5] Slack has created a JS interface to Apache Spark. When people say,
