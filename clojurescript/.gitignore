@@ -13,3 +13,4 @@ pom.xml
 .nrepl-port
 .cljs_*_repl
 node_modules
+resources/public
