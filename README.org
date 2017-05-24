@@ -626,7 +626,149 @@ I just do not know what to make of this language.
 ** TODO Haskell
 C'mon. I gotta.
 
-** TODO ClojureScript
+** ClojureScript
+
+*** Introduction
+
+I'm a Clojure developer. I want to escape the JVM. The elephant in the room,
+then, is ClojureScript. What's like Clojure but isn't Java? You get the idea.
+
+I've resisted ClojureScript. Frankly, I'm not perfectly sure /why/. Something
+about the added complexity of [[Compiles to JavaScript]] has made me squeamish. And,
+it's not like JS is known for a) it's dazzling type system, or b) it's stunning
+performance.
+
+And yet! And yet. Let's consider both points for a moment.
+
+**** Types
+
+So I like being able to annotate my types; I'd like to get an error when they
+don't line up. One doesn't usually think "JavaScript" when one thinks
+sophisticated type systems; instead, one thinks Haskell or Scala.
+
+But here's the thing: types don't really have to enter the runtime, for my
+purposes. I'd be perfectly content with a gradual or optional type system, /a la/
+Racket. I love this [[https://www.youtube.com/watch?v=JBmIQIZPaHY][talk]] between Matthias Felleisen and Gilad Bracha; they argue
+between themselves that the point of a type system is for the user, primarily
+for documentation. This idea moves me.
+
+And: Clojure /has/ something like an optional type system now, in its
+new [[https://clojure.org/about/spec][clojure.spec]] library. We've gained the ability to indicate and enforce the
+shape we expect our data to take. So who cares if those types don't enter the JS
+runtime? I don't think the answer is me.
+
+**** Performance
+
+There's a *lot* of energy being put in to JavaScript -- from V8 to the Closure
+library. It seems perfectly plausible to me that JS performance could be a lot
+less of a thing than I'd wondered about. Now: I've got no clue what the
+concurrency model is like. We're gonna have to see how this goes. But, it just
+doesn't seem like this is a reason not to try it!
+
+Let's get rolling.
+
+*** Getting started
+So this is all well and good; what's it like to get going? I've got a great
+handle on Clojure, a good handle on Java, and almost no handle on the JavaScript
+ecosystem. How hard could it be?
+
+The answer is: we'll see, but maybe very.
+
+**** Setting up a project
+This part? Easy as can be. Our old friend leiningen has templates for
+ClojureScript projects, with or without Figwheel. Figwheel does nothing we need
+for a stand-alone CLI project, so we skip it. There's some minimal tweaking
+needed in our ~project.clj~, but it really is minimal. A very short distance in
+and I have a tiny app that compiles and runs with node.
+
+...except that I've also found that I should have a build.clj file? Which I
+don't, and yet, everything is, so far, working. So that's... that's unsettling.
+
+**** OK, now what
+
+Next task: how do I read a file? Surely this'll be easy, right?
+
+**** But wait
+
+It turns out, connecting figwheel is actually necessary, /for some reason/. I
+cannot understand why, but when I attempt to connect CIDER to a project without
+figwheel connected, it explodes. Grand.
+
+And: I cannot seem to get it to work, for love or money. I've been fighting it
+for two hours.
+
+/Some Time Passes/
+
+Got it. Past Ross was a clever lad and hard-coded figwheel as the REPL type in
+his Clojure emacs configs. Goddamnit. So. Much.
+
+Finally switched to a Node repl, everything is Flying along.
+
+**** Really actually getting going
+Here we begin to see the true weird part of ClojureScript for me: the runtime.
+
+I've written a bunch of Java and lots of both Scala and Clojure. For those
+languages, Java -- the host language -- provides a base frame of reference
+for... mostly everything. Scala is probably the most divergent, but host interop
+is still big; in Clojure we go to Java all the time (e.g. ~clojure.java.io~). I've
+done this before with F#, where .NET provides a great deal of core
+functionality.
+
+In ClojureScript, we're going instead to Node, and it is... different. .NET has
+a lot of ideas in common with Java -- or at least, both ideas are using very
+similar core concepts. Want to read a file? Here's a class that'll hand you one
+line at a time. But Node is deeply and profoundly async and event-driven. Vis:
+
+#+BEGIN_SRC clojure :eval never :exports code
+(defn count-file [path]
+  (let [status (atom 0)
+        input (.createReadStream fs path)
+        rl (open-line-reader input)]
+    (.on rl "line" #(swap! status inc))
+    (.on rl "close" #(println @status))))
+#+END_SRC
+
+We open a file interface, and then take action every time we get a ~line~ event
+(which is of course identified by a string name b/c JavaScript).
+
+Sooooooooo.
+
+This presents two challenges:
+
+1. The tooling present for my kind of work is not rich in CLJS land.
+2. Node presents some metaphors built for very different work than mine.
+
+Can I write wrappers that get the Stuff done? That's the question.
+
+**** Reading lines
+For our first trick: reading lines. You know what a great abstraction I love is?
+Clojure's ~core.async~. Reading lines in to a channel is magnificently easy.
+
+**** Parsing Lines
+Parsing turns out to have an advantage: I can re-use a good deal of my code from
+my reference implementation.
+
+**** Result
+So. I've gotten the CSV parsing part of this done; it works. It certainly...
+yeah. We can say that for sure.
+
+But, there are two things:
+
+1. Getting this set up so stack traces didn't murder my eyes was /awful/.
+2. It is impossibly slow.
+
+This is not just slow. This is ten or maybe fifteen times slower than the
+Clojure reference implementation. This... no. This wont do. Now, a true fact:
+I'm not a Node dev. Maybe I've messed this right up? I dunno where in here
+anything would block, but let's be real -- making Node go fast is not my core
+skill set. I could easily have just gotten it wrong.
+
+...but the code smells right-ish. It is, at least, reasonably clear to me. It
+was awful to debug, but it was reasonably pleasant to knock together at first.
+
+But I am calling it here. ClojureScript will be excellent for web-work, and
+probably for hitting REST APIs, but for data scrubbing, I'ma, uh, stick with
+something else.
 
 ** TODO Julia
 * Footnotes
