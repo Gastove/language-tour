@@ -83,6 +83,29 @@ to be an unwieldy abstraction in most cases, and if I can't pass or return a
 function in a language I'm just not interested. I would always rather write a
 system of verbs than a system of nouns.
 
+*** Sufficiently Fast
+"How fast is FooLang vs BarLang" is a topic that, frankly, kind of irritates me.
+And: I want a language that is "as fast as possible" -- or really, "fast
+enough." So ok: what the heck does that mean for me?
+
+Yes, I like it when code runs fast. I care /far more/ about how fast my code is to
+read and write. Here's the thing I really like: I like it when my code is
+implemented in a conceptually clear way that didn't take forever to write /and/
+runs "fast enough". I want to spend my time on the problem at hand, the work I
+want to get done -- *not* on optimizing runtime performance. "Fast enough," for
+me, means "could I have written this more easily/clearly in a different language
+and had it execute in the same or less time."
+
+An odd point: a language /can/ be "too slow." The reference implementation for my
+data cleaner, for instance, runs in 2 minutes. If it ran in 6 minutes --
+whatever. If it ran in 10, I might get irritated. Somewhere in there, it just
+stops being practical to run it at all -- at twenty or thirty minutes of runtime
+it'd be faster to knock together a ~sed~ script.
+
+So. For me, the language to beat is Clojure running on the JVM. I can write and
+read it easily, it's "fast enough" while also being conceptually clear, and it
+can parse 10 million lines of CSV in two minutes.
+
 *** Typed
 I'm alarmed to admit that I like type systems. My favorite type systems do
 rather a lot of inference; the very nicest are entirely optional. Type systems
@@ -139,9 +162,6 @@ behind it is a must.
 God I adore having a REPL or interactive session available.
 
 ** Nice if I can get it:
-
-*** Performant
-Who doesn't love a thing that doesn't take all day to run?
 
 *** Concurrency Model
 Manually starting threads is great and all, but we can do a _lot_ better. Actor
@@ -809,7 +829,74 @@ sys 1m29.536s
 
 Seventy. Two. Minutes.
 
-** TODO Julia
+** DOING [[https://julialang.org/][Julia]]
+
+Julia has emerged in the last few years as an alternative to Python and R. To be
+frank, it has a variety of features that appeal to me:
+
+1. Optional types
+2. High-performance "functional"-paradigms
+3. Fast. As. Heck.
+
+Aaaaand there are downsides. The single biggest is, Julia is /very young/, and the
+API is /not/ stable. Breaking changes occur all the dang time. I have no idea what
+the state of the package ecosystem is going to be like. Tooling? Is there
+tooling? Let's... well, let's find out.
+
+*** Getting set up
+The first real weird, for me, with Julia, is that there is not ~brew~ installation
+for it. You install a manual package you upgrade manually, and you manually
+slink the Julia binary somewhere in to your path. Weird.
+
+We have good news too, tho: [[https://ess.r-project.org/][ESS]], a powerful Emacs mode for statistical
+computation, already has Julia support. We are, in some sense, off to the races.
+
+So far, the only thing I can't find is a clear reference on how to scaffold out
+a new project. I'm definitely Winging It on this part.
+
+However, here's an immediate problem: whoever wrote the org-babel integration
+for Julia hasn't had the wherewithal to publish to MELPA, meaning I'd have to
+clone and vendorize it if I want that functionality. Fiddlesticks.
+
+*** Getting Coding
+We immediately run face-first in to challenges with ESS as a julia environment:
+
+1. Julia uses Ruby/Lua style ~thing / end~ pairs. ESS doesn't have any kind of
+   insertion/pairing mechanism baked in, which Weirds working with blocks.
+2. Interpreter isn't colorized.
+3. No linting/syntax checking/error reporting.
+4. No eldoc support
+
+That said, taking an action on each line of a file is... uh. Appealing:
+
+#+BEGIN_SRC julia :eval never
+function count_lines(path)
+    counter = 0
+    handle = open(path, "r")
+
+    for line in eachline(handle)
+        counter += 1
+    end
+
+    counter
+end
+#+END_SRC
+
+This counts 10 million lines in... just under two seconds. /Yeah/.
+
+But back to tooling: managing thing/end pairs is pretty easy to add with
+~yasnippet~; the bigger blocker is linting. While there's been [[https://github.com/flycheck/flycheck/issues/1091][extensive
+discussion]] of adding Julia linter support to Flycheck, it doesn't yet exist.
+And: the Julia linting package expects you'll start a "linting server" and talk
+to it via JSON over a port.
+
+So.
+
+Wiring that up... could be a pain. We're gonna see how file parsing goes without
+it.
+
+*** It goes like this
+
 ** TODO Haskell
 C'mon. I gotta.
 
