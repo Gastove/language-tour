@@ -21,8 +21,5 @@ let postMessage msg =
                "text", msg]
         )
 
-[<EntryPoint>]
 let main argv =
-    let res = postMessage argv.[0]
-    printfn "%O" res
     0
