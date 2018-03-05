@@ -36,7 +36,9 @@ materials, so who cares if you drive the nail slightly too deep.
 A framing hammer is "for" framing. Is that the only thing you can do with it?
 No. Is a framing hammer the only kind of hammer you can frame with? Again, no.
 But if you are about to do some framing and thinking, "what kind of hammer
-should I get", the answer is definitely "framing hammer".
+should I get", the answer is probably "framing hammer". If you are a
+professional framing carpenter, or are going to do a /ton/ of framing, the answer
+is absolutely "buy you a dang framing hammer."
 
 R is "for" statistical programming and analysis. Can you do other stuff with it?
 Yes, definitely. JavaScript is "for" programming in the browser. Can you do an
@@ -48,6 +50,10 @@ though I want to put Java in a box labeled "use only for X", as though I'm
 diminishing Java by saying "this is good for one thing." Not so. Good design is
 about knowing limits and acknowledging them. In my desire to be a capable modern
 developer, I want to know which tools to reach for, and when.
+
+Or, at the very least, I want to think about my own use-cases and know which
+tools support *them* in a way I find pleasing. Maybe if I know which hammer is for
+framing I can also know which hammer is for me.
 
 * Developing a notion of "best"
 
@@ -93,7 +99,7 @@ I'd love to find a language with either a static or gradual type system. I don't
 care if it enters the runtime, but I'd love to be able to document the inputs
 and outputs of a function clearly.
 
-*** Run-Time
+*** Light-weight run-time
 A language needs to have a run-time that matches its use case. Clojure is, for
 me, the essential example. To run Clojure, one must run a JVM. If one is
 writing an application -- say, a web server -- the five-or-maybe-a-hundred
@@ -102,13 +108,19 @@ written a CLI, those seconds are intolerable -- not to mention the outrageous
 resource requirements. Imagine if ~grep~ took 40 seconds and a gig of RAM to run
 on even the tiniest files. Yeah.
 
+This is to say that for my use-case, I usually do /not/ want to pay the price of a
+JVM. I'm much more interested in something that can get right to work than
+something that needs to meditate for half a minute before it can make an HTTP
+request.
+
 *** Approximately as high level as possible
 You know what I never ever want to do if I don't have to? Manual memory
 management. In fact, there's a tremendous list of problems, of wheels that I do
 not want to have to re-invent. Writing my own CSV parser. Performing ~GET~
-requests. /Ugh/. But also, in some sense this idea captures for me the notion
-of a rich standard library. I mean, I /could/ implement my own socket handling,
-TCP/IP, web sockets, etc -- but in most cases, I'd really rather not.
+requests by building the request manually. /Ugh/. But also, in some sense this
+idea captures for me the notion of a rich standard library. I mean, I /could/
+implement my own socket handling, TCP/IP, web server, etc -- but in most cases,
+I'd really rather not.
 
 *** Solidly Usable in my Workflow
 I already write a lot of code. I'm in Emacs all day, every day, unless I'm in my
@@ -340,6 +352,10 @@ Rust has take then full length of /Return of the Jedi/ to get in to a passable
 state. I probably should have installed via brew. JFC.
 
 We're... gonna come back to this if I have time. Holy hell.
+
+<2018-03-05 Mon>: Rust has made some really excellent improvements to tools like
+Cargo, its install process, keeping versions up-to-date; we're going to try this
+again soon
 
 ** [[http://fsharp.org/][F#]]
 
@@ -624,7 +640,7 @@ The deploy story is unclear; distribution is unclear.
 I just do not know what to make of this language.
 
 
-** ClojureScript
+** [[https://clojurescript.org/][ClojureScript]]
 
 *** Introduction
 
@@ -746,7 +762,7 @@ Clojure's ~core.async~. Reading lines in to a channel is magnificently easy.
 Parsing turns out to have an advantage: I can re-use a good deal of my code from
 my reference implementation.
 
-**** Result
+*** Result
 So. I've gotten the CSV parsing part of this done; it works. It certainly...
 yeah. We can say that for sure.
 
