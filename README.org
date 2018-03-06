@@ -275,6 +275,22 @@ We'll see.
 
 * The Languages
 
+** Yet to even try, but hopefully some day:
+
+*** Golang
+Go has some things about it that make it look pretty snappy! I'm not in love
+with the syntax or the attitude; something about the way the docs and materials
+are written have a very "why on /Earth/ have you been writing anything else?"
+feeling. But it's tidy language that quickly compiles down to static binaries,
+and that's not a bad way to be.
+
+God willing and the creek don't rise, by the time I get around to trying this,
+they'll have some kind of package management solution worked out.
+
+*** Common Lisp
+You know what, I can't believe it took me so long to realize CL was an option. I
+write Emacs Lisp all the time, for crying in the mud.
+*** Julia
 ** [[http://nim-lang.org][nim]]
 Statically typed and pseudo-imperative, with an emphasis on its hygienic macro
 system and compiler optimizations. Tastes like somebody couldn't chose between
