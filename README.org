@@ -287,9 +287,6 @@ and that's not a bad way to be.
 God willing and the creek don't rise, by the time I get around to trying this,
 they'll have some kind of package management solution worked out.
 
-*** Common Lisp
-You know what, I can't believe it took me so long to realize CL was an option. I
-write Emacs Lisp all the time, for crying in the mud.
 *** Julia
 ** [[http://nim-lang.org][nim]]
 Statically typed and pseudo-imperative, with an emphasis on its hygienic macro
@@ -799,6 +796,122 @@ was awful to debug, but it was reasonably pleasant to knock together at first.
 But I am calling it here. ClojureScript will be excellent for web-work, and
 probably for hitting REST APIs, but for data scrubbing, I'ma, uh, stick with
 something else.
+
+** [[http://www.gigamonkeys.com/book/][Common Lisp]]
+You know what, I can't believe it took me so long to realize CL was an option. I
+write Emacs Lisp all the time, for crying in the mud. Let's see what do!
+
+
+*** A Little Background
+Common Lisp has a property unusual among the programming languages I speak so
+far: Common Lisp is a specification, not an implementation. ANSI Common Lisp is
+much like the ANSI SQL spec, or the ANSI terminal standard. Different
+programmers or organizations will choose to implement different parts of the
+spec differently, and for different purposes.
+
+For my purposes here, I'll be using the (I am lead to believe) bog-standard
+[[http://www.sbcl.org/][Steelbank]] lisp compiler (usually referred to by its default binary name, ~sbcl~).
+With any luck, this will all be... predominantly non-weird. Yes.
+
+*** Resources
+An up-side, at least theoretically, of using an older language like Common Lisp
+is that there /should/ be a rich set of learning resources. Broadly, it looks like
+this is true. Things I've found so far include:
+
+- Peter Siebel's [[http://www.gigamonkeys.com/book/][Practical Common Lisp]], available for free on-line.
+- [[https://www.cs.cmu.edu/~dst/LispBook/][Common Lisp: A Gentle Introduction to Symbolic Computation]] by David
+  Touretzkey, also available for free on-line
+- [[https://lisp-lang.org][lisp-lang.org]], which seems to have a melange of incomplete and *very* thorough
+  guides.
+
+Broadly, it seems like the internet is rich in well developed Lisp resources,
+but slightly lighter on, say, quick blog posts on "getting started with common
+lisp" or the like.
+
+*** Tooling
+:PROPERTIES:
+:header-args: :dir /tmp/ :results output
+:END:
+Okay, so this is... a place where Common Lisp can be... weirder-feeling,
+perhaps, than other languages. Because of the whole spec-not-an-impl thing,
+there are baked-in tools one usually /presumes/ access to, but the
+presence/absence/up-to-date-ness of them is a function of the CL implementation
+you've got on hand.
+
+For openers, we need to cope with:
+- [[https://common-lisp.net/project/asdf/][ASDF]] :: As best I can tell, a build-tool equivalent; comes baked in to most
+     Lisp implementations. So far, I've seen references to ~.asd~ files, but very
+     few notes on how the whole works... works.
+- [[https://www.quicklisp.org/beta/][Quicklisp]] :: Which actually downloads and installs lisp packages. As best I
+     can tell, ~quicklisp~ works on a model similar to something like Maven --
+     packages at specific versions are downloaded in to a global repository. The
+     difference, I /think/, is that I believe ~quicklisp~ has to be manually invoked
+     from client code. Maybe? More to learn, for sure.
+- [[https://roswell.github.io/][Roswell]] :: at least in theory, Roswell makes installing Common Lisp
+     applications locally... cleaner. We'll see.
+
+**** Installing Quicklisp
+First, we get the files we need:
+#+BEGIN_SRC shell
+curl -O https://beta.quicklisp.org/quicklisp.lisp
+curl -O https://beta.quicklisp.org/quicklisp.lisp.asc
+#+END_SRC
+
+Let's make sure we got the right thing:
+#+BEGIN_SRC shell
+gpg --verify quicklisp.lisp.asc quicklisp.lisp ^&1
+#+END_SRC
+
+#+RESULTS:
+: gpg: Signature made Wed Jan 28 13:13:26 2015 PST using RSA key ID 028B5FF7
+: gpg: Good signature from "Quicklisp Release Signing Key <release@quicklisp.org>" [unknown]
+: gpg: WARNING: This key is not certified with a trusted signature!
+: gpg:          There is no indication that the signature belongs to the owner.
+: Primary key fingerprint: D7A3 489D DEFE 32B7 D0E7  CC61 3079 65AB 028B 5FF7
+
+Probably good enough.
+
+#+BEGIN_SRC shell :eval never
+sbcl --load quicklisp.lisp
+#+END_SRC
+
+
+**** Installing Roswell
+Roswell installs from brew. The first time you run it, it downloads and installs
+/its own ~sbcl~ and Quicklisp./ So that's heckin' wacky. Clearly every thing is fine
+and normal.
+
+*** In which thing immediately get weird
+So I think to myself: okay, let's build a mental model of how to build a Lisp
+application. I want to make a CLI, ~sbcl~ calls itself a "lisp compiler" -- great!
+I know what those words mean. So: how do I compile my Common Lisp program?
+
+I start digging, and then I keep digging, because the answer doesn't seem to be
+as obvious as I was expecting it to be. I finally find this line from Peter
+Siebel, which gives me a hint that things are not as I expect:
+
+#+BEGIN_QUOTE
+To further complicate matters, /program/ isn't really well defined in Lisp.
+#+END_QUOTE
+
+wat.
+
+It seems that the expectation among lispers is to just... always run a REPL, and
+load your application in to that. Which seems... surprising... to me.
+The difficulty, it seems, is the question of the Lisp runtime. Lisp
+implementations and their assumptions vary widely, but the most common part of
+building a binary is that the Lisp runtime itself must be embedded. Fortunately,
+it turns out there /is/ a canonical way to do this. It's called [[http://www.sbcl.org/manual/#Saving-a-Core-Image]["building a core
+image"]], and in SBCL, you do it with the function, ~save-lisp-and-die~. Wanna find
+a tidier way to run this? Just use ~Make~ extensions.
+
+Sure.
+
+(It turns out, another solution might be a thing called [[https://roswell.github.io/][Roswell]]. More
+investigation needed.)
+
+*** Getting coding
+Okay. Given that all this is true
 
 ** TODO Julia
 ** TODO Haskell
