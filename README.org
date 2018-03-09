@@ -910,8 +910,163 @@ Sure.
 (It turns out, another solution might be a thing called [[https://roswell.github.io/][Roswell]]. More
 investigation needed.)
 
+
+*** Setting up Emacs
+A side benefit of Emacs being, well, Emacs is its tight relationship with Common
+Lisp (Emacs Lisp is a derivative of Common Lisp.) Many Lispers are Emacs users.
+Great! What does getting this all set up look like?
+
+For starters, I installed ~sbcl~ and ~Quicklisp~, but now I suppose that I'm going
+to try Roswell as a way of interacting with Lisps. Roswell is easy to get:
+
+#+BEGIN_SRC shell
+brew install roswell
+#+END_SRC
+
+But here it gets weird. Roswell proudly tells me it's installing its own ~sbcl~
+and ~Quicklisp~. Suuuuure. It also has instructions on [[https://github.com/roswell/roswell/wiki/Initial-Recommended-Setup][setting up Roswell with
+slime]], which is very good, because installing Roswell immediately broke Slime's
+ability to find ~sbcl~. So, I do as the directions say and: boom. Error buffer:
+
+#+BEGIN_EXAMPLE
+(progn (load "/Users/gastove/.roswell/lisp/slime/2018.02.28/swank-loader.lisp" :verbose t) (funcall (read-from-string "swank-loader:init")) (funcall (read-from-string "swank:start-server") "/var/folders/by/zmfvwxsn5q57gwh_018pcn400000gn/T/slime.80351"))
+
+fatal error encountered in SBCL pid 84666(tid 0x7fff8b96c340):
+can't find core file at /Users/gastove/.roswell/impls/x86-64/darwin/sbcl/system/lib/sbcl/sbcl.core
+#+END_EXAMPLE
+
+Super duper. Also, fully inscrutable! Spare on hints. But, there's a path there,
+so  check and, that's odd, /most/ of that directory structure doesn't actually
+exist. Uh. Cool.
+
+After a few moments floundering, and almost entirely on a lark, I think, "well
+OK, what if I try installing ~sbcl~" with Roswell /again/? Guessing entirely, I try:
+
+#+BEGIN_SRC shell
+ros install sbcl
+#+END_SRC
+
+This thinks for a surprisingly long time, eventually completes. And now, ~M-x
+slime~ works like a charm.
+
 *** Getting coding
-Okay. Given that all this is true
+Okay. Given that all this is true, let's... start... trying... to thing. Given
+the, ah, somewhat different philosophy I've already encountered around "what
+even a program is", I think I'll start by trying to make sure I can do fiddly
+basic nonsense like "build a tinkertoy app" and "install a dep." Lessee. Here we
+go. How do.
+
+
+*** Nope, actually it just gets weirder
+So far, this is... frustrating. I have learned a variety of things. Few of them
+are helping me much.
+
+1. Common Lisp uses a single /unversioned/ package repository. There does exist
+   [[https://github.com/fukamachi/qlot][tooling]] to install packages locally; it's not clear how easy to use it will
+   be. This isn't necessarily a problem; since my goal is to use Common Lisp as
+   a hackers local development language, relying on global versions is less
+   problematic than it would otherwise be. But still. I am... nettled.
+2. Building a CLI -- or even running my code outside the REPL at all -- is, at
+   best, really badly documented and strange. It seems like I basically have two
+   options: pass lisp forms to ~sbcl~; figure out how the heck to use Roswell. The
+   former is medium-clear, but relies on Make, of which I am not a fan. The
+   latter sounds easy and clear -- Roswell even provides a "scripting"
+   functionality, which sure sounds nice! -- but the documentation... doesn't
+   get you where you need to be.
+
+The documentation problem is a real and intense one. For instance, here is,
+verbatim, the entire text of the Lisp Cookbook on how to build with Roswell:
+
+#+BEGIN_QUOTE
+Roswell, an implementation manager and much more, also has the ros build command, that should work for many implementations.
+#+END_QUOTE
+
+Thanks buddy. How about the man pages?
+
+#+BEGIN_QUOTE
+ros-build(1)                                                                                                                                                                                                                                                                    ros-build(1)
+
+       ros-build - Shortcut to "ros dump executable" # synopsis
+
+       ros [options] build
+
+       Equivalent to calling ros dump executable <file>.
+
+description
+SEE ALSO
+       ros(1)
+
+AUTHORS
+       Roswell Project Team.
+#+END_QUOTE
+
+Oh sure great that's fine. No notion of what arguments to pass; no clues about
+whether I need an ASDF spec or a Roswell script or a little goat with a hat.
+
+Digging further, we go to the man page for ~ros-dump~, which at least literally
+exists and is vaguely better than the for ~ros-build~. We know we're calling ~ros
+dump executable~, so that's a start. First problem: here's the call signature for
+~ros dump~:
+
+#+BEGIN_SRC shell :eval never
+ros [OPTIONS1...] [OPTIONS2...] MODE args...
+#+END_SRC
+
+It takes two different sets of options, along with args specific to the mode;
+there is no indication which of these three things ~[options]~ intends to
+indicate. Super duper. Next problem: here's the documentation for the ~executable~
+build mode:
+
+#+BEGIN_QUOTE
+   executable NAME [-o OUTPUT]
+       When  a  script  is  dumped with executable, the dumped image becomes an self-contained executable binary which implies
+       --restart main.
+
+       If OUTPUT is given, the resulting binary is written to this file.  Otherwise, the output filename is deduced from  NAME
+       and  is  written  in the same directory.  On Windows and if SCRIPT has .ros extension, the filename will be SCRIPT.exe.
+       On the other systems, the result will be SCRIPT (without extension).
+#+END_QUOTE
+
+So that's fine then. No notion of arguments or assumptions. What is ~NAME~? Is
+this command contextual? Do we expect an ~ASDF~ file? Where the heck did ~SCRIPT~
+come from?
+
+Lord.
+
+It's easy to miss, but the final hint is at the top of the ~ros-dump~ man page:
+
+#+BEGIN_QUOTE
+ros-dump - make a dumped image of a roswell script
+#+END_QUOTE
+
+Ah. Roswell script. Ok.
+
+Roswell /does/ have good convenience functions for creating Roswell scripts. What
+it does not have is any guidance whatever on how to actually /load your own
+project/ in your new script. That is left entirely as an exercise to the author,
+which... let's have a look at an example, eh? The Roswell author is also the
+author of ~qlot~, and recommends the ~qlot.ros~ script at an opening example.
+
+Sure. [[https://github.com/fukamachi/qlot/blob/master/roswell/qlot.ros][here it is]]. It's hard to read, but I think what it's doing is using an
+interop library (~uiop~) to find the symbol of the current project where it's
+already installed on the system, and then to call it.
+
+What breaks my brain about this is that it seems to imply a break between local
+source and installation. I *think* the assumption here is that you'd make sure
+your master branch on Github (and only Github) is up to date, and then you'd use
+Roswell to install the project along with its script, making both available.
+
+This is getting less and less appealing the more I look at it. Ugh.
+
+At this point, it seems like I have three options:
+
+1. Remove Roswell and switch to bare ~sbcl~ with Make.
+2. Get used to using Roswell scripts directly, rather than writing
+   modules/libraries, as is my habit
+3. Abandon ship on this for now and return to it later, see if I can make any
+   sense of... any of it.
+
+For now, I think we're going with option 3.
 
 ** TODO Julia
 ** TODO Haskell
