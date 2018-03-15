@@ -36,7 +36,9 @@ materials, so who cares if you drive the nail slightly too deep.
 A framing hammer is "for" framing. Is that the only thing you can do with it?
 No. Is a framing hammer the only kind of hammer you can frame with? Again, no.
 But if you are about to do some framing and thinking, "what kind of hammer
-should I get", the answer is definitely "framing hammer".
+should I get", the answer is probably "framing hammer". If you are a
+professional framing carpenter, or are going to do a /ton/ of framing, the answer
+is absolutely "buy you a dang framing hammer."
 
 R is "for" statistical programming and analysis. Can you do other stuff with it?
 Yes, definitely. JavaScript is "for" programming in the browser. Can you do an
@@ -48,6 +50,10 @@ though I want to put Java in a box labeled "use only for X", as though I'm
 diminishing Java by saying "this is good for one thing." Not so. Good design is
 about knowing limits and acknowledging them. In my desire to be a capable modern
 developer, I want to know which tools to reach for, and when.
+
+Or, at the very least, I want to think about my own use-cases and know which
+tools support *them* in a way I find pleasing. Maybe if I know which hammer is for
+framing I can also know which hammer is for me.
 
 * Developing a notion of "best"
 
@@ -93,7 +99,7 @@ I'd love to find a language with either a static or gradual type system. I don't
 care if it enters the runtime, but I'd love to be able to document the inputs
 and outputs of a function clearly.
 
-*** Run-Time
+*** Light-weight run-time
 A language needs to have a run-time that matches its use case. Clojure is, for
 me, the essential example. To run Clojure, one must run a JVM. If one is
 writing an application -- say, a web server -- the five-or-maybe-a-hundred
@@ -102,13 +108,19 @@ written a CLI, those seconds are intolerable -- not to mention the outrageous
 resource requirements. Imagine if ~grep~ took 40 seconds and a gig of RAM to run
 on even the tiniest files. Yeah.
 
+This is to say that for my use-case, I usually do /not/ want to pay the price of a
+JVM. I'm much more interested in something that can get right to work than
+something that needs to meditate for half a minute before it can make an HTTP
+request.
+
 *** Approximately as high level as possible
 You know what I never ever want to do if I don't have to? Manual memory
 management. In fact, there's a tremendous list of problems, of wheels that I do
 not want to have to re-invent. Writing my own CSV parser. Performing ~GET~
-requests. /Ugh/. But also, in some sense this idea captures for me the notion
-of a rich standard library. I mean, I /could/ implement my own socket handling,
-TCP/IP, web sockets, etc -- but in most cases, I'd really rather not.
+requests by building the request manually. /Ugh/. But also, in some sense this
+idea captures for me the notion of a rich standard library. I mean, I /could/
+implement my own socket handling, TCP/IP, web server, etc -- but in most cases,
+I'd really rather not.
 
 *** Solidly Usable in my Workflow
 I already write a lot of code. I'm in Emacs all day, every day, unless I'm in my
@@ -263,6 +275,19 @@ We'll see.
 
 * The Languages
 
+** Yet to even try, but hopefully some day:
+
+*** Golang
+Go has some things about it that make it look pretty snappy! I'm not in love
+with the syntax or the attitude; something about the way the docs and materials
+are written have a very "why on /Earth/ have you been writing anything else?"
+feeling. But it's tidy language that quickly compiles down to static binaries,
+and that's not a bad way to be.
+
+God willing and the creek don't rise, by the time I get around to trying this,
+they'll have some kind of package management solution worked out.
+
+*** Julia
 ** [[http://nim-lang.org][nim]]
 Statically typed and pseudo-imperative, with an emphasis on its hygienic macro
 system and compiler optimizations. Tastes like somebody couldn't chose between
@@ -340,6 +365,10 @@ Rust has take then full length of /Return of the Jedi/ to get in to a passable
 state. I probably should have installed via brew. JFC.
 
 We're... gonna come back to this if I have time. Holy hell.
+
+<2018-03-05 Mon>: Rust has made some really excellent improvements to tools like
+Cargo, its install process, keeping versions up-to-date; we're going to try this
+again soon
 
 ** [[http://fsharp.org/][F#]]
 
@@ -624,7 +653,7 @@ The deploy story is unclear; distribution is unclear.
 I just do not know what to make of this language.
 
 
-** ClojureScript
+** [[https://clojurescript.org/][ClojureScript]]
 
 *** Introduction
 
@@ -746,7 +775,7 @@ Clojure's ~core.async~. Reading lines in to a channel is magnificently easy.
 Parsing turns out to have an advantage: I can re-use a good deal of my code from
 my reference implementation.
 
-**** Result
+*** Result
 So. I've gotten the CSV parsing part of this done; it works. It certainly...
 yeah. We can say that for sure.
 
@@ -767,6 +796,277 @@ was awful to debug, but it was reasonably pleasant to knock together at first.
 But I am calling it here. ClojureScript will be excellent for web-work, and
 probably for hitting REST APIs, but for data scrubbing, I'ma, uh, stick with
 something else.
+
+** [[http://www.gigamonkeys.com/book/][Common Lisp]]
+You know what, I can't believe it took me so long to realize CL was an option. I
+write Emacs Lisp all the time, for crying in the mud. Let's see what do!
+
+
+*** A Little Background
+Common Lisp has a property unusual among the programming languages I speak so
+far: Common Lisp is a specification, not an implementation. ANSI Common Lisp is
+much like the ANSI SQL spec, or the ANSI terminal standard. Different
+programmers or organizations will choose to implement different parts of the
+spec differently, and for different purposes.
+
+For my purposes here, I'll be using the (I am lead to believe) bog-standard
+[[http://www.sbcl.org/][Steelbank]] lisp compiler (usually referred to by its default binary name, ~sbcl~).
+With any luck, this will all be... predominantly non-weird. Yes.
+
+*** Resources
+An up-side, at least theoretically, of using an older language like Common Lisp
+is that there /should/ be a rich set of learning resources. Broadly, it looks like
+this is true. Things I've found so far include:
+
+- Peter Siebel's [[http://www.gigamonkeys.com/book/][Practical Common Lisp]], available for free on-line.
+- [[https://www.cs.cmu.edu/~dst/LispBook/][Common Lisp: A Gentle Introduction to Symbolic Computation]] by David
+  Touretzkey, also available for free on-line
+- [[https://lisp-lang.org][lisp-lang.org]], which seems to have a melange of incomplete and *very* thorough
+  guides.
+
+Broadly, it seems like the internet is rich in well developed Lisp resources,
+but slightly lighter on, say, quick blog posts on "getting started with common
+lisp" or the like.
+
+*** Tooling
+:PROPERTIES:
+:header-args: :dir /tmp/ :results output
+:END:
+Okay, so this is... a place where Common Lisp can be... weirder-feeling,
+perhaps, than other languages. Because of the whole spec-not-an-impl thing,
+there are baked-in tools one usually /presumes/ access to, but the
+presence/absence/up-to-date-ness of them is a function of the CL implementation
+you've got on hand.
+
+For openers, we need to cope with:
+- [[https://common-lisp.net/project/asdf/][ASDF]] :: As best I can tell, a build-tool equivalent; comes baked in to most
+     Lisp implementations. So far, I've seen references to ~.asd~ files, but very
+     few notes on how the whole works... works.
+- [[https://www.quicklisp.org/beta/][Quicklisp]] :: Which actually downloads and installs lisp packages. As best I
+     can tell, ~quicklisp~ works on a model similar to something like Maven --
+     packages at specific versions are downloaded in to a global repository. The
+     difference, I /think/, is that I believe ~quicklisp~ has to be manually invoked
+     from client code. Maybe? More to learn, for sure.
+- [[https://roswell.github.io/][Roswell]] :: at least in theory, Roswell makes installing Common Lisp
+     applications locally... cleaner. We'll see.
+
+**** Installing Quicklisp
+First, we get the files we need:
+#+BEGIN_SRC shell
+curl -O https://beta.quicklisp.org/quicklisp.lisp
+curl -O https://beta.quicklisp.org/quicklisp.lisp.asc
+#+END_SRC
+
+Let's make sure we got the right thing:
+#+BEGIN_SRC shell
+gpg --verify quicklisp.lisp.asc quicklisp.lisp ^&1
+#+END_SRC
+
+#+RESULTS:
+: gpg: Signature made Wed Jan 28 13:13:26 2015 PST using RSA key ID 028B5FF7
+: gpg: Good signature from "Quicklisp Release Signing Key <release@quicklisp.org>" [unknown]
+: gpg: WARNING: This key is not certified with a trusted signature!
+: gpg:          There is no indication that the signature belongs to the owner.
+: Primary key fingerprint: D7A3 489D DEFE 32B7 D0E7  CC61 3079 65AB 028B 5FF7
+
+Probably good enough.
+
+#+BEGIN_SRC shell :eval never
+sbcl --load quicklisp.lisp
+#+END_SRC
+
+
+**** Installing Roswell
+Roswell installs from brew. The first time you run it, it downloads and installs
+/its own ~sbcl~ and Quicklisp./ So that's heckin' wacky. Clearly every thing is fine
+and normal.
+
+*** In which thing immediately get weird
+So I think to myself: okay, let's build a mental model of how to build a Lisp
+application. I want to make a CLI, ~sbcl~ calls itself a "lisp compiler" -- great!
+I know what those words mean. So: how do I compile my Common Lisp program?
+
+I start digging, and then I keep digging, because the answer doesn't seem to be
+as obvious as I was expecting it to be. I finally find this line from Peter
+Siebel, which gives me a hint that things are not as I expect:
+
+#+BEGIN_QUOTE
+To further complicate matters, /program/ isn't really well defined in Lisp.
+#+END_QUOTE
+
+wat.
+
+It seems that the expectation among lispers is to just... always run a REPL, and
+load your application in to that. Which seems... surprising... to me.
+The difficulty, it seems, is the question of the Lisp runtime. Lisp
+implementations and their assumptions vary widely, but the most common part of
+building a binary is that the Lisp runtime itself must be embedded. Fortunately,
+it turns out there /is/ a canonical way to do this. It's called [[http://www.sbcl.org/manual/#Saving-a-Core-Image]["building a core
+image"]], and in SBCL, you do it with the function, ~save-lisp-and-die~. Wanna find
+a tidier way to run this? Just use ~Make~ extensions.
+
+Sure.
+
+(It turns out, another solution might be a thing called [[https://roswell.github.io/][Roswell]]. More
+investigation needed.)
+
+
+*** Setting up Emacs
+A side benefit of Emacs being, well, Emacs is its tight relationship with Common
+Lisp (Emacs Lisp is a derivative of Common Lisp.) Many Lispers are Emacs users.
+Great! What does getting this all set up look like?
+
+For starters, I installed ~sbcl~ and ~Quicklisp~, but now I suppose that I'm going
+to try Roswell as a way of interacting with Lisps. Roswell is easy to get:
+
+#+BEGIN_SRC shell
+brew install roswell
+#+END_SRC
+
+But here it gets weird. Roswell proudly tells me it's installing its own ~sbcl~
+and ~Quicklisp~. Suuuuure. It also has instructions on [[https://github.com/roswell/roswell/wiki/Initial-Recommended-Setup][setting up Roswell with
+slime]], which is very good, because installing Roswell immediately broke Slime's
+ability to find ~sbcl~. So, I do as the directions say and: boom. Error buffer:
+
+#+BEGIN_EXAMPLE
+(progn (load "/Users/gastove/.roswell/lisp/slime/2018.02.28/swank-loader.lisp" :verbose t) (funcall (read-from-string "swank-loader:init")) (funcall (read-from-string "swank:start-server") "/var/folders/by/zmfvwxsn5q57gwh_018pcn400000gn/T/slime.80351"))
+
+fatal error encountered in SBCL pid 84666(tid 0x7fff8b96c340):
+can't find core file at /Users/gastove/.roswell/impls/x86-64/darwin/sbcl/system/lib/sbcl/sbcl.core
+#+END_EXAMPLE
+
+Super duper. Also, fully inscrutable! Spare on hints. But, there's a path there,
+so  check and, that's odd, /most/ of that directory structure doesn't actually
+exist. Uh. Cool.
+
+After a few moments floundering, and almost entirely on a lark, I think, "well
+OK, what if I try installing ~sbcl~" with Roswell /again/? Guessing entirely, I try:
+
+#+BEGIN_SRC shell
+ros install sbcl
+#+END_SRC
+
+This thinks for a surprisingly long time, eventually completes. And now, ~M-x
+slime~ works like a charm.
+
+*** Getting coding
+Okay. Given that all this is true, let's... start... trying... to thing. Given
+the, ah, somewhat different philosophy I've already encountered around "what
+even a program is", I think I'll start by trying to make sure I can do fiddly
+basic nonsense like "build a tinkertoy app" and "install a dep." Lessee. Here we
+go. How do.
+
+
+*** Nope, actually it just gets weirder
+So far, this is... frustrating. I have learned a variety of things. Few of them
+are helping me much.
+
+1. Common Lisp uses a single /unversioned/ package repository. There does exist
+   [[https://github.com/fukamachi/qlot][tooling]] to install packages locally; it's not clear how easy to use it will
+   be. This isn't necessarily a problem; since my goal is to use Common Lisp as
+   a hackers local development language, relying on global versions is less
+   problematic than it would otherwise be. But still. I am... nettled.
+2. Building a CLI -- or even running my code outside the REPL at all -- is, at
+   best, really badly documented and strange. It seems like I basically have two
+   options: pass lisp forms to ~sbcl~; figure out how the heck to use Roswell. The
+   former is medium-clear, but relies on Make, of which I am not a fan. The
+   latter sounds easy and clear -- Roswell even provides a "scripting"
+   functionality, which sure sounds nice! -- but the documentation... doesn't
+   get you where you need to be.
+
+The documentation problem is a real and intense one. For instance, here is,
+verbatim, the entire text of the Lisp Cookbook on how to build with Roswell:
+
+#+BEGIN_QUOTE
+Roswell, an implementation manager and much more, also has the ros build command, that should work for many implementations.
+#+END_QUOTE
+
+Thanks buddy. How about the man pages?
+
+#+BEGIN_QUOTE
+ros-build(1)                                                                                                                                                                                                                                                                    ros-build(1)
+
+       ros-build - Shortcut to "ros dump executable" # synopsis
+
+       ros [options] build
+
+       Equivalent to calling ros dump executable <file>.
+
+description
+SEE ALSO
+       ros(1)
+
+AUTHORS
+       Roswell Project Team.
+#+END_QUOTE
+
+Oh sure great that's fine. No notion of what arguments to pass; no clues about
+whether I need an ASDF spec or a Roswell script or a little goat with a hat.
+
+Digging further, we go to the man page for ~ros-dump~, which at least literally
+exists and is vaguely better than the for ~ros-build~. We know we're calling ~ros
+dump executable~, so that's a start. First problem: here's the call signature for
+~ros dump~:
+
+#+BEGIN_SRC shell :eval never
+ros [OPTIONS1...] [OPTIONS2...] MODE args...
+#+END_SRC
+
+It takes two different sets of options, along with args specific to the mode;
+there is no indication which of these three things ~[options]~ intends to
+indicate. Super duper. Next problem: here's the documentation for the ~executable~
+build mode:
+
+#+BEGIN_QUOTE
+   executable NAME [-o OUTPUT]
+       When  a  script  is  dumped with executable, the dumped image becomes an self-contained executable binary which implies
+       --restart main.
+
+       If OUTPUT is given, the resulting binary is written to this file.  Otherwise, the output filename is deduced from  NAME
+       and  is  written  in the same directory.  On Windows and if SCRIPT has .ros extension, the filename will be SCRIPT.exe.
+       On the other systems, the result will be SCRIPT (without extension).
+#+END_QUOTE
+
+So that's fine then. No notion of arguments or assumptions. What is ~NAME~? Is
+this command contextual? Do we expect an ~ASDF~ file? Where the heck did ~SCRIPT~
+come from?
+
+Lord.
+
+It's easy to miss, but the final hint is at the top of the ~ros-dump~ man page:
+
+#+BEGIN_QUOTE
+ros-dump - make a dumped image of a roswell script
+#+END_QUOTE
+
+Ah. Roswell script. Ok.
+
+Roswell /does/ have good convenience functions for creating Roswell scripts. What
+it does not have is any guidance whatever on how to actually /load your own
+project/ in your new script. That is left entirely as an exercise to the author,
+which... let's have a look at an example, eh? The Roswell author is also the
+author of ~qlot~, and recommends the ~qlot.ros~ script at an opening example.
+
+Sure. [[https://github.com/fukamachi/qlot/blob/master/roswell/qlot.ros][here it is]]. It's hard to read, but I think what it's doing is using an
+interop library (~uiop~) to find the symbol of the current project where it's
+already installed on the system, and then to call it.
+
+What breaks my brain about this is that it seems to imply a break between local
+source and installation. I *think* the assumption here is that you'd make sure
+your master branch on Github (and only Github) is up to date, and then you'd use
+Roswell to install the project along with its script, making both available.
+
+This is getting less and less appealing the more I look at it. Ugh.
+
+At this point, it seems like I have three options:
+
+1. Remove Roswell and switch to bare ~sbcl~ with Make.
+2. Get used to using Roswell scripts directly, rather than writing
+   modules/libraries, as is my habit
+3. Abandon ship on this for now and return to it later, see if I can make any
+   sense of... any of it.
+
+For now, I think we're going with option 3.
 
 ** TODO Julia
 ** TODO Haskell

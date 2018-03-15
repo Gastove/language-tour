@@ -1,5 +1,5 @@
 module LanguageTour
-
+s
 #if INTERACTIVE
 #r @"/Users/gastove/Code/language-tour/fsharp/LanguageTour/bin/Debug/FSharp.Data.dll"
 #else
